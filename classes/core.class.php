@@ -317,7 +317,7 @@ class core {
 		
 		SmartyObject::getInstance()->assign('items', $items);
 		
-		SmartyObject::getInstance()->register_block('dynamic', 'smarty_block_dynamic', false);
+		SmartyObject::getInstance()->registerPlugin('block', 'dynamic', 'smarty_block_dynamic', false);
 		
 		SmartyObject::getInstance()->setTemplate('select.tpl');
 	}
@@ -362,7 +362,7 @@ class core {
 		
 		SmartyObject::getInstance()->assign('items', $items);
 		
-		SmartyObject::getInstance()->register_block('dynamic', 'smarty_block_dynamic', false);
+		SmartyObject::getInstance()->registerPlugin('block', 'dynamic', 'smarty_block_dynamic', false);
 		
 		SmartyObject::getInstance()->setTemplate('select.tpl');
 	}
@@ -426,7 +426,7 @@ class core {
 		$items[] = array('id' => 1, 'name' => LANG::i18n('_back'), 'link' => '?action=char_'.$mod.'_l'.$this->session_url());
 		SmartyObject::getInstance()->assign('items', $items);
 		
-		SmartyObject::getInstance()->register_block('dynamic', 'smarty_block_dynamic', false);
+                SmartyObject::getInstance()->registerPlugin('block', 'dynamic', 'smarty_block_dynamic', false);
 		SmartyObject::getInstance()->setTemplate('select.tpl');
 	}
 	
@@ -584,3 +584,4 @@ class core {
 }
 
 ?>
+
