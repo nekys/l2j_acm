@@ -79,7 +79,7 @@ class core {
 		
 		SmartyObject::getInstance()->assign('modules', $modules);
 		
-		SmartyObject::getInstance()->register_block('dynamic', 'smarty_block_dynamic', false);
+                SmartyObject::getInstance()->registerPlugin('block', 'dynamic', 'smarty_block_dynamic', false);
 		SmartyObject::getInstance()->setTemplate('account.tpl');
 	}
 
@@ -582,4 +582,5 @@ class core {
 		$_SESSION['code'] = $key;
 	}
 }
+
 ?>
