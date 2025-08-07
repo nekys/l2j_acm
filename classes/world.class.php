@@ -16,14 +16,17 @@ class world {
  *			ID of the world selected
  */
 	public function __construct($id) {
-		
-		if(!CONFIG::g()->service_allow)
+
+		if (!CONFIG::g()->service_allow)
 			exit('Access to this private class have been restricted by the admin');
-		
-		if(CONFIG::g()->core_interlude)
+
+		if (CONFIG::g()->core_interlude)
 			exit('Accounts Services can\'t be used with interlude server');
-		
-		$this->id = mysqli_real_escape_string($id);
+
+		$conn = MYSQL::g($id);  // get your mysqli connection object
+		$mysqli = MYSQL::g(); // returns mysqli object
+		$this->id = MYSQL::g($id)->escape_string($id);
+
 		$this->set_name();
 		$this->load_chars();
 	}
@@ -64,33 +67,32 @@ class world {
  *	Get worlds list registred into login server
  *		return world list
  */
-	public function load_worlds () {
-		
-		DEBUG::add('Getting Worlds list');
-		$sql = 'SELECT `server_id` FROM `gameservers`;';
-		$rslt = MYSQL::g()->query($sql);
-		
-		$worlds = array();
-		while ($row = @mysqli_fetch_object($rslt)) {
-			$w = (CONFIG::g()->select_game_server($row->server_id));
-			if(!empty($w))
-				$worlds[] = new world($row->server_id);
-			else
-				DEBUG::add('World n�'.$row->server_id.' had not configuration !');
-		}
-		
-		return $worlds;
+	public static function load_worlds() {
+	    DEBUG::add('Getting Worlds list');
+	    $sql = 'SELECT `server_id` FROM `gameservers`;';
+	    $rslt = MYSQL::g()->query($sql);
+	
+	    $worlds = array();
+	    while ($row = mysqli_fetch_object($rslt)) {
+	        $w = (CONFIG::g()->select_game_server($row->server_id));
+	        if(!empty($w))
+	            $worlds[] = new world($row->server_id);
+	        else
+	            DEBUG::add('World n°'.$row->server_id.' had no configuration !');
+	    }
+	
+	    return $worlds;
 	}
 
 /**
  *	Get name world by id
  *		return name world
  */	
-	public function get_name_world ($id) {
+	public static function get_name_world ($id) {
 		$id = MYSQL::g()->escape_string($id);
 		$dom = new DOMDocument;
 		$dom->load(CONFIG::g()->service_server_name);
-		return iconv('utf-8',CONFIG::g()->core_iso_type,$dom->getElementsByTagName('server')->item(($id-1))->getAttribute("name"));
+		return iconv('utf-8', CONFIG::g()->core_iso_type, $dom->getElementsByTagName('server')->item(($id-1))->getAttribute("name"));
 	}
 
 /**
@@ -116,4 +118,5 @@ class world {
 	}
 
 }
+
 ?>
